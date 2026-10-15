@@ -1,0 +1,26 @@
+/* Troque as cores do projeto aqui. */
+:root {
+  --fundo: #f8efff;
+  --cartao: #ffffff;
+  --principal: #7635bd;
+  --principal-hover: #5e249d;
+  --texto: #30213f;
+  --suave: #6f617c;
+  --borda: #e7d8f3;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: var(--fundo); color: var(--texto); }
+.pagina { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+.cartao { width: 100%; max-width: 680px; background: var(--cartao); padding: clamp(24px, 6vw, 54px); border-radius: 24px; box-shadow: 0 16px 45px #7635bd16; }
+.etiqueta { font-size: 13px; font-weight: 700; color: var(--principal); letter-spacing: 2px; }
+h1 { font-size: clamp(34px, 6vw, 52px); line-height: 1.12; margin: 18px 0; }
+.descricao { color: var(--suave); line-height: 1.65; margin-bottom: 32px; }
+label { display: block; font-weight: 700; margin-bottom: 12px; }
+textarea { width: 100%; resize: vertical; border: 2px solid var(--borda); border-radius: 12px; padding: 16px; font: inherit; color: var(--texto); }
+textarea:focus { outline: 2px solid var(--principal); outline-offset: 2px; }
+button { display: block; width: 100%; margin-top: 16px; padding: 16px; background: var(--principal); color: white; font: inherit; font-weight: 700; border: 0; border-radius: 12px; cursor: pointer; }
+button:hover { background: var(--principal-hover); }
+.resultado { margin-top: 30px; padding: 22px; border: 1px solid var(--borda); border-radius: 12px; background: #fcf9ff; min-height: 125px; }
+.resultado h2 { margin: 0 0 12px; font-size: 20px; }
+.resultado p { color: var(--suave); line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
