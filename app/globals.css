@@ -24,3 +24,17 @@ button:hover { background: var(--principal-hover); }
 .resultado { margin-top: 30px; padding: 22px; border: 1px solid var(--borda); border-radius: 12px; background: #fcf9ff; min-height: 125px; }
 .resultado h2 { margin: 0 0 12px; font-size: 20px; }
 .resultado p { color: var(--suave); line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+input { width: 100%; border: 2px solid var(--borda); border-radius: 12px; padding: 16px; font: inherit; color: var(--texto); margin-bottom: 20px; }
+input:focus { outline: 2px solid var(--principal); outline-offset: 2px; }
+button:disabled { cursor: wait; opacity: .6; }
+.acoes-login { display: flex; gap: 12px; }
+.secundario { background: #eee2fa; color: var(--principal); }
+.secundario:hover { background: #e1cef4; }
+.erro { color: #a51d38; line-height: 1.5; }
+.aviso { color: #285a39; line-height: 1.5; }
+.topo { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 16px 24px; background: var(--cartao); border-bottom: 1px solid var(--borda); }
+.topo button { margin: 0; width: auto; padding: 12px 20px; }
+.email-usuario { min-width: 0; overflow-wrap: anywhere; }
+.topo + .pagina { min-height: calc(100vh - 78px); }
+@media (max-width: 420px) { .acoes-login { flex-direction: column; gap: 0; } }
