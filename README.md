@@ -30,6 +30,14 @@ A página `/login` permite entrar e criar conta. A página `/` verifica a identi
 
 Execute `npm test` para validar login, cadastro, saída, validações e tradução de erros com o serviço de autenticação simulado. Um teste completo de autenticação real exige um projeto Supabase configurado.
 
+## Recuperação de senha
+
+Na página de login, clique em “Esqueci minha senha”, informe o e-mail e abra o link recebido no mesmo navegador em que fez o pedido. A tela “Crie uma nova senha” permite definir e confirmar a senha. Links inválidos ou expirados permitem solicitar outro envio. A resposta ao pedido não revela se um e-mail possui conta.
+
+No Supabase, em **Authentication → URL Configuration**, mantenha **Site URL** com o endereço oficial do site e adicione `https://SEU-SITE.vercel.app/auth/callback` a **Redirect URLs**, substituindo pelo domínio real. Para desenvolvimento, adicione `http://localhost:3000/auth/callback`. O envio depende da configuração de e-mail do Supabase; seu serviço padrão pode restringir destinatários e possui limites de envio. Para público externo, configure SMTP em Authentication. Não é necessário desativar a confirmação de e-mail para recuperar senhas.
+
+O fluxo usa PKCE e cookies de sessão; o template de recuperação do Supabase deve manter o link padrão `{{ .ConfirmationURL }}`. Se o e-mail não chegar, confira spam, limites de envio e logs do Supabase. O envio real só pode ser validado com um projeto Supabase e uma caixa de e-mail acessível.
+
 ## Treino de entrevista
 
 O arquivo `desafio.js` configura título, campos, modelo e prompt da página principal. Com `modoTeste: true`, o botão retorna uma avaliação de exemplo sem chamar a IA nem consumir cota. A rota `POST /api/ia` exige uma sessão autenticada.
