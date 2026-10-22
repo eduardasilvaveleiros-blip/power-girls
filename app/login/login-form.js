@@ -2,6 +2,7 @@
 
 import { useActionState } from 'react';
 import { authenticate } from './actions';
+import Link from 'next/link';
 
 export default function LoginForm({ configured }) {
   const [state, formAction, pending] = useActionState(authenticate, {});
@@ -19,6 +20,7 @@ export default function LoginForm({ configured }) {
         <button type="submit" name="intent" value="signup" className="secundario" disabled={pending || !configured}>Criar conta</button>
       </div>
       {pending && <p role="status">Aguarde...</p>}
+      <p><Link href="/esqueci-senha">Esqueci minha senha</Link></p>
     </form>
   );
 }
