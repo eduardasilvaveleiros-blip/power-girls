@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { desafio } from '../../desafio';
 import ArrowIcon from './arrow-icon';
+import ResponseField from './response-field';
+import ResultActions from './result-actions';
 
 export default function IdeaForm() {
   const [valores, setValores] = useState({});
@@ -52,7 +54,7 @@ export default function IdeaForm() {
   };
 
   return (
-    <main className="workspace">
+    <main className={`workspace${resposta ? ' avaliacao-pronta' : ''}`}>
       <section className="workspace-intro" aria-labelledby="titulo-treino">
         <div><span className="etiqueta">PREPARE O SEU PRÓXIMO PASSO</span>
           <h1 id="titulo-treino">{desafio.nome}<span className="ponto-titulo">.</span></h1>
@@ -67,14 +69,12 @@ export default function IdeaForm() {
             <span className="contador-campos">{preenchidos} de {desafio.campos.length} campos</span>
           </div>
           <p className="ajuda-formulario">Não precisa ter experiência profissional. O que você viveu também tem valor.</p>
+          <p className="ajuda-cronometro">O tempo começa ao selecionar uma resposta e pausa ao sair dela. Ao voltar, continua de onde parou. É só para seu treino: não muda a nota.</p>
           <form onSubmit={analisar} aria-busy={analisando}>
             {desafio.campos.map(({ id, rotulo, linhas }, index) => (
-              <div className="campo-desafio" key={id}>
-                <label htmlFor={id}><span className="numero-campo" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>{rotulo}</label>
-                <textarea id={id} name={id} rows={linhas} maxLength={10000} placeholder={exemplos[id]}
-                  value={valores[id] || ''}
-                  onChange={evento => setValores(atuais => ({ ...atuais, [id]: evento.target.value }))} />
-              </div>
+              <ResponseField key={id} id={id} rotulo={rotulo} linhas={linhas} index={index}
+                placeholder={exemplos[id]} value={valores[id] || ''}
+                onChange={evento => setValores(atuais => ({ ...atuais, [id]: evento.target.value }))} />
             ))}
             <button className="botao-analisar" type="submit" disabled={analisando}>
               {analisando ? <><span className="spinner" aria-hidden="true" /> Analisando...</> : <>{desafio.botao}<ArrowIcon /></>}
@@ -88,7 +88,7 @@ export default function IdeaForm() {
           <section className="cartao resultado" aria-live="polite" aria-busy={analisando} aria-labelledby="titulo-resultado">
             <span className="etiqueta">02 / NOVAS PERSPECTIVAS</span>
             <h2 id="titulo-resultado">Seu próximo passo</h2>
-            {resposta ? <p className="texto-resposta">{resposta}</p> : <div className="resultado-vazio">
+            {resposta ? <><p className="texto-resposta">{resposta}</p><ResultActions text={resposta} /></> : <div className="resultado-vazio">
               <span className="vazio-simbolo" aria-hidden="true">✦</span>
               <h3>{analisando ? 'Analisando...' : 'Um olhar novo para o seu potencial.'}</h3>
               <p>{analisando ? 'Estamos preparando sugestões a partir das suas respostas.' : 'Preencha os campos ao lado. Sua avaliação aparecerá aqui, com sugestões para você seguir em frente.'}</p>
