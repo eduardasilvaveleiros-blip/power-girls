@@ -15,16 +15,18 @@ export default function LoginForm({ configured }) {
       <input id="email" name="email" type="email" autoComplete="email" autoCapitalize="none" spellCheck={false}
         placeholder="seunome@exemplo.com" required maxLength={254}
         value={email} onChange={event => setEmail(event.target.value)}
-        onBlur={() => setEmail(value => value.trim())}
+        onBlur={event => setEmail(event.currentTarget.value.trim())}
         aria-invalid={state.field === 'email' || undefined}
         aria-describedby={state.field === 'email' ? 'login-error' : undefined} />
-      <label htmlFor="password">Senha</label>
+      <div className="rotulo-senha"><label htmlFor="password">Senha</label><Link href="/esqueci-senha">Esqueci minha senha</Link></div>
+      <div className="campo-senha">
       <input id="password" name="password" type={showPassword ? 'text' : 'password'} autoComplete="current-password" required
         value={password} onChange={event => setPassword(event.target.value)}
         aria-invalid={state.field === 'password' || undefined}
         aria-describedby={state.field === 'password' ? 'login-error' : undefined} />
-      <button type="button" className="secundario" aria-controls="password" aria-pressed={showPassword}
+      <button type="button" className="mostrar-senha" aria-controls="password" aria-pressed={showPassword}
         onClick={() => setShowPassword(value => !value)}>{showPassword ? 'Ocultar senha' : 'Mostrar senha'}</button>
+      </div>
       {!configured && <p role="alert" className="erro">O login ainda não foi configurado. Configure as variáveis públicas do Supabase.</p>}
       {state.error && <p id="login-error" role="alert" className="erro">{state.error}</p>}
       {state.message && <p role="status" className="aviso">{state.message}</p>}
@@ -33,7 +35,6 @@ export default function LoginForm({ configured }) {
         <button type="submit" name="intent" value="signup" className="secundario" disabled={pending || !configured}>Criar conta</button>
       </div>
       {pending && <p role="status">Aguarde...</p>}
-      <p><Link href="/esqueci-senha">Esqueci minha senha</Link></p>
     </form>
   );
 }

@@ -98,3 +98,39 @@ test('login remove espaços nas extremidades do e-mail sem alterar a senha', asy
   } } });
   await assert.rejects(actions.authenticate({}, form('login', ' senha com espaços ', ' garota@example.com ')), /REDIRECT:\/$/);
 });
+
+test('login reconhece respostas antigas sem código em vez de mensagem genérica', async () => {
+  for (const [message, expected] of [
+    ['Invalid login credentials', /E-mail ou senha incorretos/],
+    ['Email not confirmed', /Confirme seu e-mail/],
+    ['Invalid API key', /mesmo projeto Supabase/],
+    ['Email logins are disabled', /login por e-mail está desativado/],
+  ]) {
+    const actions = await loadActions({ auth: { signInWithPassword: async () => ({ error: { message, status: 400 } }) } });
+    assert.match((await actions.authenticate({}, form('login'))).error, expected);
+  }
+});
+
+test('limite e indisponibilidade não são apresentados como senha incorreta', async () => {
+  for (const [status, expected] of [[429, /Muitas tentativas/], [503, /temporariamente indisponível/]]) {
+    const actions = await loadActions({ auth: { signInWithPassword: async () => ({ error: { status, message: 'private diagnostic' } }) } });
+    const result = await actions.authenticate({}, form('login'));
+    assert.match(result.error, expected);
+    assert.doesNotMatch(result.error, /private diagnostic/);
+  }
+});
+
+test('login sem sessão nunca é apresentado como cadastro a confirmar', async () => {
+  const actions = await loadActions({ auth: { signInWithPassword: async () => ({ data: { session: null }, error: null }) } });
+  const result = await actions.authenticate({}, form('login'));
+  assert.match(result.error, /iniciar sua sessão/);
+  assert.equal(result.message, undefined);
+});
+
+test('erro de login não tenta criar outra conta automaticamente', async () => {
+  const actions = await loadActions({ auth: {
+    signInWithPassword: async () => ({ error: { code: 'invalid_credentials' } }),
+    signUp: async () => { assert.fail('Login não pode criar outra conta'); },
+  } });
+  assert.equal((await actions.authenticate({}, form('login'))).error, 'E-mail ou senha incorretos.');
+});

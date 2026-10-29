@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { createClient } from '../../lib/supabase/server';
-import { authErrorMessage } from '../../lib/supabase/errors';
+import { authErrorMessage, logAuthFailure } from '../../lib/supabase/errors';
 
 export async function authenticate(_previousState, formData) {
   const email = String(formData.get('email') || '').trim();
@@ -20,8 +20,15 @@ export async function authenticate(_previousState, formData) {
     const { data, error } = intent === 'signup'
       ? await supabase.auth.signUp({ email, password })
       : await supabase.auth.signInWithPassword({ email, password });
-    if (error) return { error: authErrorMessage(error) };
-    if (!data.session) return { message: 'Verifique seu e-mail para confirmar o cadastro. Depois, entre com seu e-mail e senha.' };
+    if (error) {
+      logAuthFailure(intent, error);
+      return { error: authErrorMessage(error) };
+    }
+    if (!data?.session) {
+      if (intent === 'signup') return { message: 'Verifique seu e-mail para confirmar o cadastro. Depois, entre com seu e-mail e senha.' };
+      logAuthFailure(intent, { code: 'session_missing' });
+      return { error: 'Não foi possível iniciar sua sessão. Tente entrar novamente.' };
+    }
   } catch {
     return { error: 'Não foi possível conectar ao serviço de login. Tente novamente em alguns instantes.' };
   }
