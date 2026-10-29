@@ -9,9 +9,9 @@ export async function authenticate(_previousState, formData) {
   const password = String(formData.get('password') || '');
   const intent = formData.get('intent');
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
-    return { error: 'Informe um e-mail válido.' };
+    return { error: 'Informe um e-mail completo, como seunome@exemplo.com.', field: 'email' };
   }
-  if (!password) return { error: 'Informe sua senha.' };
+  if (!password) return { error: 'Informe sua senha.', field: 'password' };
   if (intent !== 'login' && intent !== 'signup') return { error: 'Escolha Entrar ou Criar conta.' };
   if (intent === 'signup' && password.length < 6) return { error: 'A senha deve ter pelo menos 6 caracteres.' };
   try {

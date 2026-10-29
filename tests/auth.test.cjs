@@ -60,7 +60,7 @@ test('credenciais inválidas e erros desconhecidos são apresentados em portugu�
 test('validações e configuração ausente impedem chamadas de autenticação', async () => {
   const actions = await loadActions(null);
   assert.match((await actions.authenticate({}, form('signup', '123'))).error, /pelo menos 6/);
-  assert.match((await actions.authenticate({}, form('login', '', 'inválido'))).error, /e-mail válido/);
+  assert.match((await actions.authenticate({}, form('login', '', 'inválido'))).error, /e-mail completo/);
   assert.match((await actions.authenticate({}, form('login'))).error, /não foi configurado/);
 });
 
@@ -76,4 +76,25 @@ test('sair encerra a sessão antes do redirecionamento e informa falhas', async 
   assert.equal(signedOut, true);
   const failed = await loadActions({ auth: { signOut: async () => ({ error: { message: 'failure' } }) } });
   assert.equal((await failed.signOut()).error, 'Não foi possível sair. Tente novamente.');
+});
+
+test('validação identifica o campo incorreto sem devolver a senha', async () => {
+  const actions = await loadActions(null);
+  for (const email of ['', 'sem-arroba', 'nome@', 'nome@dominio']) {
+    const result = await actions.authenticate({}, form('login', 'senha-secreta', email));
+    assert.equal(result.field, 'email');
+    assert.match(result.error, /e-mail completo/);
+    assert.equal(JSON.stringify(result).includes('senha-secreta'), false);
+  }
+  const missing = await actions.authenticate({}, form('login', ''));
+  assert.equal(missing.field, 'password');
+});
+
+test('login remove espaços nas extremidades do e-mail sem alterar a senha', async () => {
+  const actions = await loadActions({ auth: { signInWithPassword: async values => {
+    assert.equal(values.email, 'garota@example.com');
+    assert.equal(values.password, ' senha com espaços ');
+    return { data: { session: {} }, error: null };
+  } } });
+  await assert.rejects(actions.authenticate({}, form('login', ' senha com espaços ', ' garota@example.com ')), /REDIRECT:\/$/);
 });
