@@ -15,7 +15,7 @@ export default function LoginForm({ configured }) {
       <input id="email" name="email" type="email" autoComplete="email" autoCapitalize="none" spellCheck={false}
         placeholder="seunome@exemplo.com" required maxLength={254}
         value={email} onChange={event => setEmail(event.target.value)}
-        onBlur={() => setEmail(value => value.trim())}
+        onBlur={event => setEmail(event.currentTarget.value.trim())}
         aria-invalid={state.field === 'email' || undefined}
         aria-describedby={state.field === 'email' ? 'login-error' : undefined} />
       <label htmlFor="password">Senha</label>
