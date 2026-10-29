@@ -105,6 +105,12 @@ button:disabled { cursor: not-allowed; opacity: .65; }
 .ajuda-formulario { color: var(--suave); font-size: 12px; line-height: 1.8; margin: 0 0 28px; }
 .campo-desafio + .campo-desafio { margin-top: 26px; }
 .campo-desafio label { display: flex; gap: 9px; align-items: baseline; }
+.rotulo-resposta { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.rotulo-resposta label { min-width: 0; }
+.cronometro { display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; font-size: 11px; line-height: 1.7; font-variant-numeric: tabular-nums; color: var(--suave); background: var(--fundo); padding: 3px 7px; border-radius: 6px; margin-bottom: 10px; }
+.cronometro svg { width: 15px; height: 15px; }
+.cronometro-ativo { color: var(--principal); background: var(--lilas); }
+.ajuda-cronometro { font-size: 11px; line-height: 1.7; color: var(--suave); margin: -14px 0 26px; }
 .numero-campo { color: #96729a; font-size: 10px; font-weight: 500; }
 .botao-analisar { margin-top: 28px; display: flex; justify-content: center; gap: 14px; align-items: center; }
 .botao-analisar > span:last-child { font-size: 20px; line-height: 1; }
@@ -137,8 +143,18 @@ button:disabled { cursor: not-allowed; opacity: .65; }
 .historico-vazio { padding: 12px 0 24px; max-width: 480px; }
 .historico-vazio p { color: var(--suave); font-size: 14px; line-height: 1.8; }
 .historico-vazio .link-botao { width: fit-content; margin-top: 22px; }
+.dicas-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.numero-dica { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--lilas); color: var(--principal); font: 22px/1 Georgia, serif; margin-bottom: 24px; }
+.dica-cartao h2 { font-size: 20px; }
+.dica-cartao p, .dicas-convite p { font-size: 14px; line-height: 1.8; color: var(--suave); }
+.dicas-convite { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 32px; margin-top: 28px; background: var(--rosa); border-radius: 16px; }
+.dicas-convite h2 { margin: 0 0 8px; }
+.dicas-convite p { margin: 0; max-width: 550px; }
+.dicas-convite .link-botao { width: auto; margin: 0; flex-shrink: 0; }
 @media (min-width: 1600px) { .acesso-editorial { padding-left: max(80px, calc((100vw - 1320px) / 2)); } }
 @media (max-width: 1060px) {
+  .dicas-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dicas-convite { align-items: flex-start; flex-direction: column; }
   .topo-interior { gap: 20px; padding-inline: 28px; }
   .email-usuario { display: none; }
   .workspace { padding: 36px 28px 0; }
@@ -150,6 +166,8 @@ button:disabled { cursor: not-allowed; opacity: .65; }
   .acesso-editorial { padding-inline: 32px; }
 }
 @media (max-width: 760px) {
+  .dicas-grid { grid-template-columns: 1fr; gap: 16px; }
+  .dicas-convite { padding: 24px; }
   .acesso-pagina { grid-template-columns: 1fr; }
   .acesso-editorial { min-height: auto; padding: 22px 24px 26px; }
   .acesso-mensagem { margin: 30px 0 0; max-width: none; }
